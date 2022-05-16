@@ -6,8 +6,7 @@
   <NaturTable
     :columns="columns"
     :data="data"
-    v-model:currentPage="pageParameter.pageNo"
-    v-model:pageSize="pageParameter.pageSize"
+    v-model:pagConfig="pageParameter"
     :total="50"
     ref="naturTableRef"
   >
@@ -24,10 +23,9 @@
 </template>
 
 <script setup lang="ts">
-  import { onMounted, ref } from 'vue'
+  import { onMounted, ref, watch } from 'vue'
   // import MdEditor from '@/components/MdEditor.vue'
   import NaturTable from '@/components/NaturTable.vue'
-  import { watchDeep } from '@/components/hooks'
 
   onMounted(() => {
     const { elTableRef } = naturTableRef.value
@@ -51,9 +49,12 @@
   const naturTableRef = ref(null)
 
   const pageParameter = ref({ pageNo: 1, pageSize: 20 })
-  watchDeep(pageParameter, nv => {
-    console.log(nv)
-  })
+  watch(
+    () => pageParameter,
+    nv => {
+      console.log(nv)
+    }
+  )
 
   const consoleLog = v => {
     console.log(v)

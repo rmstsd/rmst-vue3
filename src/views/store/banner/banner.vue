@@ -1,12 +1,6 @@
 <template>
   <el-button @click="add" type="primary">新增</el-button>
-  <NaturTable
-    :columns="columns"
-    :data="data"
-    v-model:currentPage="pageParameter.pageNo"
-    v-model:pageSize="pageParameter.pageSize"
-    :total="total"
-  >
+  <NaturTable :columns="columns" :data="data" v-model:pagConfig="pageParameter" :total="total">
     <template #imageUrl="{ row }">
       <el-image style="width: 100px; height: 80px" :src="row.imageUrl" fit="cover" />
     </template>
@@ -36,23 +30,17 @@
   </NaturTable>
 </template>
 
-<script setup>
-  import { onMounted, ref } from 'vue'
+<script setup lang="ts">
+  import { onMounted, ref, watch } from 'vue'
   import { useRouter } from 'vue-router'
   import { getBannerList, pushBanner, unPush, deleteBanner } from '@/api/appStore.api'
 
   import NaturTable from '@/components/NaturTable.vue'
-  import { watchDeep } from '@/components/hooks'
   import { ElMessage, ElMessageBox } from 'element-plus'
 
-  const router = useRouter()
+  import { bannerTypeMap } from './constant'
 
-  const bannerTypeMap = new Map([
-    ['1', '网页'],
-    ['2', '应用详情'],
-    ['3', '标签'],
-    ['4', '专题']
-  ])
+  const router = useRouter()
 
   const bannerStatusMap = new Map([
     [0, '未发布'],
@@ -73,7 +61,10 @@
   const pageParameter = ref({ pageNo: 1, pageSize: 2 })
   const total = ref(0)
 
-  watchDeep(pageParameter, () => getList())
+  watch(
+    () => pageParameter,
+    () => getList()
+  )
   onMounted(() => getList())
 
   const getList = () => {

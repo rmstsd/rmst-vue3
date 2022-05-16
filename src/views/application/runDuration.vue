@@ -36,8 +36,7 @@
     :columns="columns"
     :data="resData.list || []"
     :loading="loading"
-    v-model:currentPage="pageParameter.pageNo"
-    v-model:pageSize="pageParameter.pageSize"
+    v-model:pagConfig="pageParameter"
     :total="resData.total || 0"
   >
     <template #runTime="{ row }">
@@ -47,17 +46,17 @@
 </template>
 
 <script setup lang="ts">
-  import { onMounted, ref } from 'vue'
+  import { onMounted, watch } from 'vue'
 
   import { getRunTimeReportList, exportRunDurationExcel } from '@/api/application.api'
   import { getEnterpriseLists } from '@/api/enterprise.api'
 
   import NaturTable from '@/components/NaturTable.vue'
-  import { watchDeep, useRequest } from '@/components/hooks'
+  import { useRequest } from '@/components/hooks'
 
-  import { parseTime, getCurrDate } from '@/utils/parseTime'
+  import { getCurrDate } from '@/utils/parseTime'
   import { downloadExcel } from '@/utils/byteStream'
-  import { handleRunTime } from './constant'
+  import { handleRunTime, getDateStr } from './constant'
 
   const { resData: enterpriseList, run: runGetEnterpriseLists } = useRequest(getEnterpriseLists)
   const { loading, resData, run } = useRequest(getRunTimeReportList)
@@ -67,6 +66,15 @@
     }
   })
 
+  watch(
+    () => pageParameter,
+    () => getList()
+  )
+  onMounted(() => {
+    runGetEnterpriseLists()
+    getList()
+  })
+
   const columns = [
     { property: 'id', label: 'id', width: 80 },
     { property: 'enterpriseName', label: '企业名称' },
@@ -74,29 +82,12 @@
     { property: 'runTime', label: '运行时长', slot: true }
   ]
 
-  const prevDayDate = new Date(Date.now() - 24 * 60 * 60 * 1000) // 前一天
-
-  const Y = prevDayDate.getFullYear()
-  const M = prevDayDate.getMonth() + 1
-  const D = prevDayDate.getDate()
-
-  const Y_str = String(Y).padStart(2, '0')
-  const M_str = String(M).padStart(2, '0')
-  const D_str = String(D).padStart(2, '0')
-
-  const dateStr = `${Y_str}-${M_str}-${D_str}`
-
+  const dateStr = getDateStr()
   const pageParameter = $ref({ pageNo: 1, pageSize: 5 })
   const form = $ref({
     tenantId: null,
     startTime: dateStr,
     endTime: dateStr
-  })
-
-  watchDeep(pageParameter, () => getList())
-  onMounted(() => {
-    runGetEnterpriseLists()
-    getList()
   })
 
   const getList = () => {

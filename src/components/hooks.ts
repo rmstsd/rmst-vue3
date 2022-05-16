@@ -1,27 +1,28 @@
-import { ref, watch } from 'vue'
+import { reactive, ref, toRefs } from 'vue'
 
-export const watchDeep = (wv, cb) => {
-  watch(wv, cb, { deep: true })
-}
-
-export const useRequest = (service, option = {}) => {
+export function useRequest<TResData, TParameter extends any[]>(
+  service: (...args: TParameter) => Promise<TResData>,
+  option: { initialResData?: any; onSuccess?: (res: TResData) => void } = {}
+) {
   const { initialResData, onSuccess } = option
 
-  const loading = ref(false)
-  const resData = ref(initialResData === undefined ? {} : initialResData)
+  const state = reactive<{ loading: boolean; resData: TResData }>({
+    loading: false,
+    resData: initialResData === undefined ? {} : initialResData
+  })
 
-  const run = parameter => {
-    loading.value = true
-    return service(parameter)
+  const run = (...args: TParameter) => {
+    state.loading = true
+
+    return service(...args)
       .then(res => {
-        resData.value = res
-
+        state.resData = res // todo: 解决类型问题
         onSuccess && onSuccess(res)
       })
       .finally(() => {
-        loading.value = false
+        state.loading = false
       })
   }
 
-  return { loading, resData, run }
+  return { ...toRefs(state), run }
 }

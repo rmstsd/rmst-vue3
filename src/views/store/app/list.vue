@@ -4,8 +4,7 @@
     :columns="columns"
     :data="resData.list || []"
     :loading="loading"
-    v-model:currentPage="pageParameter.pageNo"
-    v-model:pageSize="pageParameter.pageSize"
+    v-model:pagConfig="pageParameter"
     :total="resData.total || 0"
   >
     <template #iconUrl="{ row }">
@@ -36,15 +35,15 @@
   </NaturTable>
 </template>
 
-<script setup>
-  import { isRef, onMounted } from 'vue'
+<script setup lang="ts">
+  import { isRef, onMounted, watch } from 'vue'
   import { useRouter } from 'vue-router'
   import { ElMessage, ElMessageBox } from 'element-plus'
 
   import { getAppPage } from '@/api/appStore.api'
 
   import NaturTable from '@/components/NaturTable.vue'
-  import { watchDeep, useRequest } from '@/components/hooks'
+  import { useRequest } from '@/components/hooks'
 
   const router = useRouter()
 
@@ -65,7 +64,10 @@
 
   const pageParameter = $ref({ pageNo: 1, pageSize: 5 })
 
-  watchDeep(pageParameter, () => getList())
+  watch(
+    () => pageParameter,
+    () => getList()
+  )
   onMounted(() => getList())
 
   const getList = () => {

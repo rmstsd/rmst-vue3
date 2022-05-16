@@ -1,11 +1,13 @@
 import request from './_service'
 import axios from 'axios'
 
-export function getUploadUrl(params) {
+type IUploadUrl = { type: 'BANNER'; contentType: string }
+type IUploadUrlResult = { uploadUrl: string; url: string }
+export function getUploadUrl(params: IUploadUrl): Promise<IUploadUrlResult> {
   return request.get('/store/store/getUploadUrl', { params })
 }
 
-export function uploadFileToOSS(file, url, contentType) {
+export function uploadFileToOSS(file: File, url: string, contentType: string): Promise<void> {
   return axios({
     url: url,
     method: 'PUT',

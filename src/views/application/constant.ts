@@ -26,3 +26,19 @@ export const handleRunTime = (timestamp: number) => {
   const s = String(seconds).padStart(2, '0')
   return `${h}:${m}:${s}`
 }
+
+export const getDateStr = () => {
+  const prevDayDate = new Date(Date.now() - 24 * 60 * 60 * 1000) // 前一天
+
+  const Y = prevDayDate.getFullYear()
+  const M = prevDayDate.getMonth() + 1
+  const D = prevDayDate.getDate()
+
+  const Y_str = String(Y).padStart(2, '0')
+  const M_str = String(M).padStart(2, '0')
+  const D_str = String(D).padStart(2, '0')
+
+  const dateStr = `${Y_str}-${M_str}-${D_str}`
+
+  return dateStr
+}

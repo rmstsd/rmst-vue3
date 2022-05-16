@@ -46,23 +46,18 @@
   </el-form>
 </template>
 
-<script setup>
-  import { ref } from 'vue'
+<script setup lang="ts">
   import { useRouter } from 'vue-router'
+
   import Upload from '@/components/Upload.vue'
   import { getAppList, getLabelList, getTopicList, saveBanner } from '@/api/appStore.api'
 
-  const bannerTypeMap = new Map([
-    ['1', 'Url'],
-    ['2', '应用'],
-    ['3', '标签'],
-    ['4', '专题']
-  ])
+  import { bannerTypeMap } from './constant'
 
   const router = useRouter()
 
-  const formRef = ref(null)
-  const form = ref({
+  const formRef = $ref(null)
+  const form = $ref({
     bannerName: '',
     bannerType: null,
     bannerValue: null,
@@ -76,22 +71,23 @@
     imageUrl: { required: true, message: '请上传图片', trigger: 'change' }
   }
 
-  const appList = ref([])
-  const labelList = ref([])
-  const topicList = ref([])
+  const appList = $ref([])
+  const labelList = $ref([])
+  const topicList = $ref([])
 
-  const bannerTypeChange = v => {
-    form.value.bannerValue = null
-    if (v === '2') !appList.length && getAppList().then(res => (appList.value = res))
-    if (v === '3') !labelList.length && getLabelList().then(res => (labelList.value = res))
-    if (v === '4') !topicList.length && getTopicList().then(res => (topicList.value = res))
+  const bannerTypeChange = (v: string) => {
+    form.bannerValue = null
+    if (v === '2') !appList.length && getAppList().then(res => Object.assign(appList, res))
+    if (v === '3') !labelList.length && getLabelList().then(res => Object.assign(labelList, res))
+    if (v === '4') !topicList.length && getTopicList().then(res => Object.assign(topicList, res))
   }
 
   const submit = () => {
     formRef.validate(valid => {
       if (!valid) return
+      console.log(form)
 
-      saveBanner(form).then(() => router.back())
+      // saveBanner(form).then(() => router.back())
     })
   }
 </script>

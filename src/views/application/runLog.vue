@@ -62,7 +62,7 @@
   import { exportRunTimeExcel, getRunTimeList } from '@/api/application.api'
 
   import NaturTable from '@/components/NaturTable.vue'
-  import { watchDeep, useRequest } from '@/components/hooks'
+  import { useRequest } from '@/components/hooks'
 
   import { parseTime, getCurrDate } from '@/utils/parseTime'
   import { downloadExcel } from '@/utils/byteStream'

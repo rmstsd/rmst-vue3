@@ -17,12 +17,12 @@
 </template>
 
 <script setup lang="ts">
-  import { computed } from 'vue'
+  import { computed, PropType } from 'vue'
   import { Plus, Delete } from '@element-plus/icons-vue'
   import { getUploadUrl, uploadFileToOSS } from '@/api/_upload'
 
   const props = defineProps({
-    fileList: Array,
+    fileList: Array as PropType<string[]>,
     fileUrl: String,
     multiple: { type: Boolean, default: false }
   })
@@ -32,9 +32,9 @@
     if (props.multiple) return props.fileList
     else return props.fileUrl ? [props.fileUrl] : []
   })
-  const inputRef = $ref(null)
+  const inputRef = $ref<HTMLInputElement>(null)
 
-  const deleteItem = idx => {
+  const deleteItem = (idx: number) => {
     if (props.multiple)
       emit(
         'update:fileList',
@@ -43,7 +43,8 @@
     else emit('update:fileUrl', '')
   }
 
-  const change = async evt => {
+  const change = async (evt: Event) => {
+    // @ts-ignore
     const [file] = evt.target.files
     inputRef.value = null
 

@@ -53,7 +53,14 @@ export function getTopicList() {
   })
 }
 
-export function saveBanner(data) {
+type ISaveBanner = {
+  bannerDesc: string
+  bannerName: string
+  bannerType: string
+  bannerValue: number | string
+  imageUrl: string
+}
+export function saveBanner(data: ISaveBanner) {
   return request({
     url: '/store/banner/add',
     method: 'post',
