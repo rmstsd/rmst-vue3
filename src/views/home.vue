@@ -20,10 +20,15 @@
       <el-button @click="consoleLog(row.id)">删除</el-button>
     </template>
   </NaturTable>
+
+  <n-ellipsis :line-clamp="2">
+    电灯熄灭物换星移泥牛入海电灯熄灭物换星移泥牛入海电灯熄灭物换星移泥牛入海 电灯熄灭物换星移泥牛入海
+  </n-ellipsis>
 </template>
 
 <script setup lang="ts">
   import { onMounted, ref, watch } from 'vue'
+  import { NEllipsis } from 'naive-ui'
   // import MdEditor from '@/components/MdEditor.vue'
   import NaturTable from '@/components/NaturTable.vue'
 

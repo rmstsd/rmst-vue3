@@ -11,7 +11,7 @@ export function useRequest<TResData, TParameter extends any[]>(
     resData: initialResData === undefined ? {} : initialResData
   })
 
-  const run = (...args: TParameter) => {
+  const run = async (...args: TParameter) => {
     state.loading = true
 
     return service(...args)

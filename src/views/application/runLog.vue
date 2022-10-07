@@ -94,7 +94,7 @@
     { property: 'startTime', label: '启动时间', 'min-width': 130 },
     { property: 'endTime', label: '结束时间', 'min-width': 130 },
     { property: 'runTime', label: '运行时长', slot: true },
-    { property: 'runStatus', label: '运行状态' }
+    { property: 'runStatus', label: '运行状态', slot: true }
   ]
 
   const pageParameter = $ref({ pageNo: 1, pageSize: 5 })

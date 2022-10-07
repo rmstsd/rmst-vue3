@@ -59,7 +59,9 @@
   import { handleRunTime, getDateStr } from './constant'
 
   const { resData: enterpriseList, run: runGetEnterpriseLists } = useRequest(getEnterpriseLists)
+
   const { loading, resData, run } = useRequest(getRunTimeReportList)
+
   const { loading: exportLoading, run: runExport } = useRequest(exportRunDurationExcel, {
     onSuccess: res => {
       downloadExcel(res, `运行日志${getCurrDate()}`)
