@@ -6,6 +6,7 @@
     "jsx": "preserve",
     "jsxImportSource": "vue",
     "strict": true,
+    "strictNullChecks": false,
     "skipLibCheck": true,
     "isolatedModules": true,
     "resolveJsonModule": true,
