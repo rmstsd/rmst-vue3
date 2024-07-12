@@ -4,9 +4,13 @@
   <h1>{{ doubleCount }}</h1>
 
   <button @click="up">up list</button>
-  <ul>
+
+  <!-- <ul>
     <Child v-for="item in list" :key="item" :item="item"></Child>
-  </ul>
+  </ul> -->
+
+  <Child2 />
+  <Child3 />
 </template>
 
 <script setup lang="ts">
@@ -26,6 +30,9 @@
     watchPostEffect
   } from 'vue'
   import Child from './Child.vue'
+  import Child2 from './Child2.vue'
+  import Child3 from './Child3.vue'
+  import store from './store'
 
   const list = shallowRef([1, 2, 3])
   const state = reactive({ name: 'zhangsan', age: 18 })
